@@ -12,7 +12,7 @@ namespace ShootThaBall.View
 {
     class BallView
     {
-        Texture2D ball;
+        Texture2D balltexture;
         Texture2D background;
         //Camera camera;
         BallSimulation b_ballsimunlation;
@@ -23,7 +23,7 @@ namespace ShootThaBall.View
         {
             b_ballsimunlation = ballsimunlation;
 
-            ball = content.Load<Texture2D>("Ball.png");
+            balltexture = content.Load<Texture2D>("Ball.png");
             background = new Texture2D(graphics.GraphicsDevice, 1, 1);
             background.SetData<Color>(new Color[]
             {
@@ -39,24 +39,23 @@ namespace ShootThaBall.View
         {
             spriteBatch.Begin();
             spriteBatch.Draw(background, camera.getGameArea(), Color.HotPink);
-            
-            foreach (Ball BallList in b_ballsimunlation.GetBalls())
+            // Vector2 ballanimation = b_ballsimunlation.position();
+
+            foreach (Ball ball in b_ballsimunlation.GetBalls())
             {
-                Random rand = new Random();
+                var ballposition = camera.VisualCoord(ball.BallPosition.X - ball.Ballsize, ball.BallPosition.Y - ball.Ballsize);
+                float scale = camera.ScaleObject(balltexture.Width, ball.Ballsize);
 
-
-               
-                Vector2 ballanimation = BallList.position();
-                var ballposition = camera.VisualCoord(BallList.BallPosition.X - BallList.Ballsize, BallList.BallPosition.Y - BallList.Ballsize);
-                float scale = camera.ScaleObject(ball.Width,BallList.Ballsize);
-             
-                spriteBatch.Draw(ball, ballposition, null, Color.White, 0, new Vector2(0, 0), scale, SpriteEffects.None, 0);
-
+                spriteBatch.Draw(balltexture, ballposition, null, Color.White, 0, new Vector2(0, 0), scale, SpriteEffects.None, 0);
             }
+           
+
             // innehållet.
             spriteBatch.End();
         }
 
     }
+
 }
+
 

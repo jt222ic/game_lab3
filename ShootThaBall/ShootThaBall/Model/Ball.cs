@@ -8,33 +8,30 @@ namespace ShootThaBall.Model
 {
     class Ball
     {
+
         public float Ballsize = 0.05f;
-        private Vector2 BallCordination = new Vector2(0.5f, 0.2f);
-        private Vector2 Ballspeed = new Vector2(0.4f, 0.4f);
-        Vector2 velocity;
-        Vector2 randomDirection;  
-        
+        public Vector2 BallCordination = new Vector2(0.5f, 0.2f);
+        public Vector2 Ballspeed = new Vector2(0.5f, 0.4f);
+        private Vector2 randomDirection;
+        public Vector2 maxspeed = new Vector2(0.9f, 0.8f);
 
 
         public Ball(Random rand)
         {
-            randomDirection = new Vector2((float)rand.NextDouble() - 0.05f, (float)rand.NextDouble() - 0.5f);
-            // code from smoke effect re-use
-            randomDirection.Normalize();
-            randomDirection = randomDirection * ((float)rand.NextDouble() * 0.5f);
-            velocity = randomDirection;
-        }
+            randomDirection = new Vector2((float)rand.NextDouble() - 0.5f, (float)rand.NextDouble() - 0.5f);
 
+            randomDirection.Normalize();
+            randomDirection = randomDirection * ((float)rand.NextDouble() * maxspeed);
+
+            Ballspeed = randomDirection;
+
+        }
         public Vector2 GetBallSpeed
         {
             get
             {
                 return Ballspeed;
             }
-        }
-        public Vector2 position()
-        {
-            return BallPosition;
         }
 
         public Vector2 BallPosition
@@ -56,9 +53,8 @@ namespace ShootThaBall.Model
         }
         public void SpeedYturn()
         {
-            Ballspeed.Y = -Ballspeed.Y;      
-}
-
+            Ballspeed.Y = -Ballspeed.Y;
+        }
     }
 }
 

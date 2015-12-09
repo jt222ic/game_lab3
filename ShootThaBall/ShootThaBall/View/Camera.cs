@@ -49,7 +49,6 @@ namespace ShootThaBall.View
 
         }
 
-
         public Rectangle getGameArea()
         {
             return new Rectangle(bordersize, bordersize, (int)scaleX, (int)scaleY);

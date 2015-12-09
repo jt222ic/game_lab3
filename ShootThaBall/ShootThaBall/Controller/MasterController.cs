@@ -1,8 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ShootThaBall.Model;
 using ShootThaBall.View;
+using ShootThaBall.View.ExplosionSystem;
+using ShootThaBall.View.ExplosionSystem.Smoke;
+using System;
+using System.Collections.Generic;
 
 namespace ShootThaBall
 {
@@ -13,17 +19,37 @@ namespace ShootThaBall
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        BallSimulation gameStart;
         BallView ballview;
+        BallSimulation ballsimulation;
         Camera camera;
+        MouseState prevMousestate;
+        MouseState mousestate;
+        private List<TheOneWhoControl> Explosion = new List<TheOneWhoControl>();
+
+
+
+
+
+        TheOneWhoControl Particle;
+        
+
+       
+      
+       
 
         public MasterController()
         {
-            graphics = new GraphicsDeviceManager(this);
+
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferHeight = 500;
+            graphics = new GraphicsDeviceManager(this);
+            camera = new Camera();
+            
             graphics.PreferredBackBufferWidth = 500;
+            graphics.PreferredBackBufferHeight = 320;
             graphics.ApplyChanges();
+            
+            
+
         }
 
         /// <summary>
@@ -35,7 +61,7 @@ namespace ShootThaBall
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            IsMouseVisible = true;
             base.Initialize();
         }
 
@@ -46,12 +72,19 @@ namespace ShootThaBall
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+            camera.ScaleEverything(graphics.GraphicsDevice.Viewport);
+           // boom = this.Content.Load<SoundEffect>("fire.wav");
+            //boom = Content.Load<SoundEffect>("fire.wav").CreateInstance();
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            gameStart = new BallSimulation();
-            camera = new Camera();
-            ballview = new BallView(Content,gameStart,graphics);
-            
-            
+
+            ballsimulation = new BallSimulation();
+            ballview = new BallView(Content, ballsimulation, graphics);
+             Particle = new TheOneWhoControl(Content, spriteBatch, camera);
+
+           
+
+
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -75,8 +108,32 @@ namespace ShootThaBall
                 Exit();
 
             // TODO: Add your update logic here
+            ballsimulation.MakeTheballMove((float)gameTime.ElapsedGameTime.TotalSeconds);
 
-            gameStart.MakeTheballMove((float)gameTime.ElapsedGameTime.TotalSeconds);
+            // mouse function//
+
+            prevMousestate = mousestate;
+            mousestate = Mouse.GetState();
+
+            if(mousestate.LeftButton == ButtonState.Pressed && prevMousestate.LeftButton == ButtonState.Released)
+            {
+                Explosion.Add(new TheOneWhoControl(Content, spriteBatch, camera));
+
+                   
+                    
+              //  Particle.DrawEverything();
+                Particle.Updateeverything((float)gameTime.ElapsedGameTime.TotalSeconds);
+
+
+            }
+            //else if (mousestate.LeftButton == ButtonState.Released && prevMousestate.LeftButton == ButtonState.Pressed)
+            //{
+
+                
+            
+           
+
+
 
 
             base.Update(gameTime);
@@ -89,9 +146,14 @@ namespace ShootThaBall
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-          
 
-            ballview.Draw(spriteBatch, camera);            // TODO: Add your drawing code here
+            ballview.Draw(spriteBatch, camera);
+           // Particle.Updateeverything((float)gameTime.ElapsedGameTime.TotalSeconds);
+            Particle.DrawEverything();
+            
+            
+
+            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
