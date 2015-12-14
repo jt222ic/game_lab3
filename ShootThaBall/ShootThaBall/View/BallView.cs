@@ -17,8 +17,6 @@ namespace ShootThaBall.View
         //Camera camera;
         BallSimulation b_ballsimunlation;
 
-
-
         public BallView(ContentManager content, BallSimulation ballsimunlation, GraphicsDeviceManager graphics)
         {
             b_ballsimunlation = ballsimunlation;
@@ -31,7 +29,6 @@ namespace ShootThaBall.View
             });
             //.Load<Texture2D>("Final.jpg");
             //amera = new Camera();
-
 
         }
 

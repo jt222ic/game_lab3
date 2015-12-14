@@ -25,13 +25,11 @@ namespace ShootThaBall
         MouseState prevMousestate;
         MouseState mousestate;
         private List<TheOneWhoControl> Explosion = new List<TheOneWhoControl>();
-
-
-
-
-
+        Texture2D crosshair;
+        Aim aim;
         TheOneWhoControl Particle;
-        
+        Vector2 mousePosition;
+        ClickExplosion Click;
 
        
       
@@ -79,10 +77,10 @@ namespace ShootThaBall
 
             ballsimulation = new BallSimulation();
             ballview = new BallView(Content, ballsimulation, graphics);
-             Particle = new TheOneWhoControl(Content, spriteBatch, camera);
-
-           
-
+             Particle = new TheOneWhoControl(Content, spriteBatch, camera, mousePosition);
+            aim = new Aim();
+            crosshair = Content.Load<Texture2D>("crosshair.png");
+            Click = new ClickExplosion(Content,spriteBatch,camera);
 
 
             // TODO: use this.Content to load your game content here
@@ -109,36 +107,28 @@ namespace ShootThaBall
 
             // TODO: Add your update logic here
             ballsimulation.MakeTheballMove((float)gameTime.ElapsedGameTime.TotalSeconds);
-
-            // mouse function//
-
+            Click.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            
             prevMousestate = mousestate;
             mousestate = Mouse.GetState();
 
-            if(mousestate.LeftButton == ButtonState.Pressed && prevMousestate.LeftButton == ButtonState.Released)
+             mousePosition = camera.getLogicalCord(mousestate.X, mousestate.Y);  // mouse moving position
+
+          //mousePosition = new Vector2(mousestate.X, mousestate.Y);
+
+            if (mousestate.LeftButton == ButtonState.Pressed && prevMousestate.LeftButton == ButtonState.Released)
             {
-                Explosion.Add(new TheOneWhoControl(Content, spriteBatch, camera));
-
-                   
-                    
-              //  Particle.DrawEverything();
-                Particle.Updateeverything((float)gameTime.ElapsedGameTime.TotalSeconds);
-
-
+                aim.Update(mousePosition);
+                if (mousePosition.X <= 1f && mousePosition.X >= 0f && mousePosition.Y <= 1f && mousePosition.Y >= 0f)   // innanför 0.0 och 1.0
+                {
+                   ballsimulation.BallGotHit(mousePosition.X, mousePosition.Y, aim.CrosshairSize / 2);
+                   Click.CreateExplosion(mousePosition);
+                   Particle.OnClick(new Vector2(mousestate.X, mousestate.Y));
+                }
             }
-            //else if (mousestate.LeftButton == ButtonState.Released && prevMousestate.LeftButton == ButtonState.Pressed)
-            //{
-
-                
             
-           
-
-
-
-
             base.Update(gameTime);
         }
-
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -146,16 +136,16 @@ namespace ShootThaBall
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
             ballview.Draw(spriteBatch, camera);
-           // Particle.Updateeverything((float)gameTime.ElapsedGameTime.TotalSeconds);
-            Particle.DrawEverything();
-            
-            
-
-            // TODO: Add your drawing code here
+           
+            aim.Update(mousePosition);
+            aim.DrawCrosshair(spriteBatch, camera, crosshair);
+            Click.Draw();
+                                     // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
+       
+        
     }
 }

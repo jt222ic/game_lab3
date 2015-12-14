@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using ShootThaBall.View;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +10,10 @@ namespace ShootThaBall.Model
     class BallSimulation
     {
         private List<Ball> ballinstance = new List<Ball>();
+        
         Random rand = new Random();
         private int max = 10;
-
+        int counter = 0;
 
         public BallSimulation()
         {
@@ -19,9 +22,8 @@ namespace ShootThaBall.Model
             {
                 ballinstance.Add(new Ball(rand));
             }
-
+            
         }
-       
 
         public List<Ball> GetBalls()
         {
@@ -33,17 +35,42 @@ namespace ShootThaBall.Model
         {
             foreach (Ball ball in ballinstance)
             {
-
-                Ballbounching(ball);               // just varför!?!?!? istället för att foreach i ballbouncing???
-                ball.movingtheball(time);
+                    ball.movingtheball(time);
+                    Ballbounching(ball);
             }
+        }
+        public void BallGotHit(float mousepositionX, float mousepositionY, float crosshairSize)
+        {
+            Vector2 hej = new Vector2(mousepositionX, mousepositionY);
+            Console.WriteLine(hej);
 
+            foreach (Ball ball in ballinstance)
+            {
+                if(ball.BallAlive)
+                {
+                    
+                    if (ball.BallPosition.X + ball.Ballsize > mousepositionX - crosshairSize && 
+                        ball.BallPosition.X - ball.Ballsize < mousepositionX + crosshairSize && 
+                        ball.BallPosition.Y + ball.Ballsize > mousepositionY - crosshairSize && 
+                        ball.BallPosition.Y - ball.Ballsize > mousepositionY + crosshairSize)
+                    {
+                        counter++;
+                       
+                        Console.WriteLine("ball got hit the invi cursor{0}",counter);
+                        ball.BallAlive = false;
+                        
 
+                    }
+                }
+                
+            }
         }
 
         public void Ballbounching(Ball ball)
         {        // varför inte foreacha här?!?!!? i en lista?????? måste istället kalla på från update.....
-           
+
+            if (ball.BallAlive)
+            {
 
                 if (ball.BallPosition.X <= 0 + ball.Ballsize || ball.BallPosition.X >= 1 - ball.Ballsize)
                 {
@@ -53,9 +80,10 @@ namespace ShootThaBall.Model
                 {
                     ball.SpeedYturn(); // do something about rotating Y axel back
                 }
-            
+            }
         }
 
     }
+   
 }
 

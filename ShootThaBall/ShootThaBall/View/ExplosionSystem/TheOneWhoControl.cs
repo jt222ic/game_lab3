@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using ShootThaBall.View.ExplosionSystem._2dExplosion;
 using ShootThaBall.View.ExplosionSystem.Smoke;
@@ -15,40 +16,43 @@ namespace ShootThaBall.View.ExplosionSystem
         Texture2D Smoke;
         Texture2D Spark;
         Texture2D Explosion;
+        
         private float seperateTime;
 
         private SmokeSystem _smokesystem;
         private SplitterSystem _splittersystem;
         private Flame Flame;
-
         int flameCount = 0;
-        //private SplitterParticle s_splitterParticle;  // vetej
-
         Camera camera;
-
         SpriteBatch spriteBatch;
+        Vector2 startposition;
 
 
-        public TheOneWhoControl(ContentManager Content, SpriteBatch spriteBatch, Camera camera)
+        public TheOneWhoControl(ContentManager Content, SpriteBatch spriteBatch, Camera camera, Vector2 MousePosition)
         {
+
+            startposition = camera.getLogicalCord(MousePosition.X, MousePosition.Y);  // ska sätta in i draw // hade rätt ju
             Smoke = Content.Load<Texture2D>("particlesmokee.png");
             Spark = Content.Load<Texture2D>("spark.png");
             Explosion = Content.Load<Texture2D>("explosion.png");
-
-
-
             _smokesystem = new SmokeSystem(Smoke);
-            _splittersystem = new SplitterSystem(Spark);
+            //_splittersystem = new SplitterSystem(Spark, startposition);
             Flame = new Flame(Explosion);
 
+            
+            
             this.spriteBatch = spriteBatch;
             this.camera = camera;
 
         }
+
+        public void OnClick(Vector2 mousePosition)
+        {
+            _splittersystem = new SplitterSystem(Spark, mousePosition);
+
+        }
         public void Updateeverything(float gameTime)
         {
-
-
             float timeElapsedSeconds = gameTime;
             Flame.Update(timeElapsedSeconds);
             _splittersystem.Update(timeElapsedSeconds);
@@ -63,7 +67,7 @@ namespace ShootThaBall.View.ExplosionSystem
             }
         }
 
-        public void DrawEverything()
+        public void DrawEverything(Vector2 clickPosition)
         {
             flameCount++;
             this.spriteBatch.Begin();
@@ -72,7 +76,7 @@ namespace ShootThaBall.View.ExplosionSystem
             {
                 Flame.Draw(this.spriteBatch, this.camera);
             }
-
+            
             _splittersystem.Draw(Spark, this.camera, this.spriteBatch);
             _smokesystem.Draw(Smoke, this.spriteBatch, this.camera);
 

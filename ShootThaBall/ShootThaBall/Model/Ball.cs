@@ -14,6 +14,7 @@ namespace ShootThaBall.Model
         public Vector2 Ballspeed = new Vector2(0.5f, 0.4f);
         private Vector2 randomDirection;
         public Vector2 maxspeed = new Vector2(0.9f, 0.8f);
+        private bool ballisAlive = true;
 
 
         public Ball(Random rand)
@@ -54,6 +55,17 @@ namespace ShootThaBall.Model
         public void SpeedYturn()
         {
             Ballspeed.Y = -Ballspeed.Y;
+        }
+        public bool BallAlive
+        {
+            get
+            {
+                return ballisAlive;
+            }
+            set
+            {
+                ballisAlive = value;   // get value if true, gets none if false the ball will go through borders.
+            }
         }
     }
 }

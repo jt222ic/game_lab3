@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace ShootThaBall.View
     {
 
         private float sizeOfftheField = 250;
-        private int bordersize = 64;
+        private int bordersize = 29;
         public float scale;
         private float scaleX;
         private float scaleY;
@@ -19,8 +20,8 @@ namespace ShootThaBall.View
 
         public void ScaleEverything(Viewport viewport)
         {
-            scaleX = viewport.Width;
-            scaleY = viewport.Height;
+            scaleX = viewport.Width - bordersize * 2;
+            scaleY = viewport.Height - bordersize * 2;
 
             if (scaleX < scaleY)
             {
@@ -30,9 +31,7 @@ namespace ShootThaBall.View
             {
                 scale = scaleY;
             }
-
-            scaleX = scale - bordersize * 2;
-            scaleY = scale - bordersize * 2;
+            
         }
 
         public Vector2 VisualCoord(float x, float y)
@@ -43,7 +42,17 @@ namespace ShootThaBall.View
             return new Vector2(visualX, visualY);
         }
 
-        public float ScaleObject(int width, float radius)   // scale 10% of the screeen size
+        public Vector2 GetCrossHairVisualCoord(float x, float y)
+        {
+
+            float visualX = x * scaleX;
+            float visualY = y * scaleY;
+
+            return new Vector2(visualX, visualY);
+
+        }
+
+        public float ScaleObject(float width, float radius)  
         {
             return sizeOfftheField * 2 * radius / (float)width;
 
@@ -57,6 +66,24 @@ namespace ShootThaBall.View
         {
             return new Vector2(scaleX / width, scaleY / height);
         }
+        public Vector2 getLogicalCord(float x, float y)
+        {
+            float screenX = x / scaleX;// + bordersize;
+            float screenY = y / scaleY;
+            
+           
+            return new Vector2(screenX, screenY);
+        }
+
+        
+        public Vector2 ScaleObjects(float width, float height)
+        {
+
+
+            return new Vector2(scaleX / width , scaleY / height );
+        }
+
+
     }
 }
 

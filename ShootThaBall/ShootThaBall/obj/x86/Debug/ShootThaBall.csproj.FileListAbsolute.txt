@@ -54,3 +54,5 @@ C:\Users\jan\Desktop\gameLab3\ShootThaBall\ShootThaBall\bin\Windows\Debug\Conten
 C:\Users\jan\Desktop\gameLab3\ShootThaBall\ShootThaBall\bin\Windows\Debug\Content\particlesmokee.png
 C:\Users\jan\Desktop\gameLab3\ShootThaBall\ShootThaBall\bin\Windows\Debug\Content\spark.png
 C:\Users\jan\Desktop\gameLab3\ShootThaBall\ShootThaBall\bin\Windows\Debug\Content\fire.wav
+C:\Users\jan\Desktop\gameLab3\ShootThaBall\ShootThaBall\bin\Windows\Debug\Content\cross.png
+C:\Users\jan\Desktop\gameLab3\ShootThaBall\ShootThaBall\bin\Windows\Debug\Content\crosshair.png

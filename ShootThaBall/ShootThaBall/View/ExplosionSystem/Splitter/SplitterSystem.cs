@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,17 @@ namespace ShootThaBall.View.ExplosionSystem.Splitter
         public SplitterParticle[] particles;
         private const int maxParticles = 100;
         SplitterParticle sParticle = new SplitterParticle();
+        Vector2 startPosition;
 
         Random test = new Random();
 
-        public SplitterSystem(Texture2D sprites) // skicka in i ny position
+        public SplitterSystem(Texture2D sprites, Vector2 startPosition) // skicka in i ny position
         {
-
+            this.startPosition = startPosition;
             particles = new SplitterParticle[maxParticles];
             for (int i = 0; i < maxParticles; i++)
             {
-                particles[i] = new SplitterParticle(sprites, test);  // ingen argument ännu en skickar 100 gånger
+                particles[i] = new SplitterParticle(sprites, test, startPosition);  // ingen argument ännu en skickar 100 gånger
             }
         }
 
